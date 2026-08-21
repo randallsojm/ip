@@ -39,6 +39,8 @@ public class Nexus {
                 }
             } else if (command.startsWith("mark ")) {
                 markTask(command, tasks, completed, taskCount);
+            } else if (command.startsWith("unmark ")) {
+                unmarkTask(command, tasks, completed, taskCount);
             } else if (taskCount < MAX_TASKS) {
                 tasks[taskCount] = command;
                 taskCount++;
@@ -64,6 +66,24 @@ public class Nexus {
             completed[taskIndex] = true;
             System.out.println("Nice! I've marked this task as done:");
             System.out.println("  [X] " + tasks[taskIndex]);
+        } catch (NumberFormatException exception) {
+            System.out.println("Please specify a valid task number.");
+        }
+    }
+
+    /** Marks the task identified by a one-based number as not done. */
+    private static void unmarkTask(String command, String[] tasks, boolean[] completed, int taskCount) {
+        String taskNumber = command.substring("unmark ".length()).trim();
+        try {
+            int taskIndex = Integer.parseInt(taskNumber) - 1;
+            if (taskIndex < 0 || taskIndex >= taskCount) {
+                System.out.println("There is no task with that number.");
+                return;
+            }
+
+            completed[taskIndex] = false;
+            System.out.println("OK, I've marked this task as not done yet:");
+            System.out.println("  [ ] " + tasks[taskIndex]);
         } catch (NumberFormatException exception) {
             System.out.println("Please specify a valid task number.");
         }
