@@ -1,7 +1,7 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Nexus {
-    private static final int MAX_TASKS = 100;
     private static final String LINE = "____________________________________________________________";
 
     public static void main(String[] args) {
@@ -16,8 +16,7 @@ public class Nexus {
         System.out.println(LINE);
 
         Scanner scanner = new Scanner(System.in);
-        Task[] tasks = new Task[MAX_TASKS];
-        int taskCount = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
 
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
@@ -32,26 +31,25 @@ public class Nexus {
             System.out.println(LINE);
             if (command.equals("list")) {
                 System.out.println("Here are the tasks in your list:");
-                for (int i = 0; i < taskCount; i++) {
-                    System.out.println((i + 1) + "." + tasks[i]);
+                for (int i = 0; i < tasks.size(); i++) {
+                    System.out.println((i + 1) + "." + tasks.get(i));
                 }
             } else if (command.startsWith("mark ")) {
-                markTask(command, tasks, taskCount);
+                markTask(command, tasks);
             } else if (command.startsWith("unmark ")) {
-                unmarkTask(command, tasks, taskCount);
-            } else if (taskCount < MAX_TASKS) {
+                unmarkTask(command, tasks);
+            } else if (command.startsWith("delete ")) {
+                deleteTask(command, tasks);
+            } else {
                 try {
                     Task newTask = parseTask(command);
-                    tasks[taskCount] = newTask;
-                    taskCount++;
+                    tasks.add(newTask);
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + newTask);
-                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                 } catch (NexusException exception) {
                     System.out.println("OOPS!!! " + exception.getMessage());
                 }
-            } else {
-                System.out.println("Sorry, your task list is full.");
             }
             System.out.println(LINE);
         }
@@ -94,36 +92,55 @@ public class Nexus {
     }
 
     /** Marks the task identified by a one-based number as done. */
-    private static void markTask(String command, Task[] tasks, int taskCount) {
+    private static void markTask(String command, ArrayList<Task> tasks) {
         String taskNumber = command.substring("mark ".length()).trim();
         try {
             int taskIndex = Integer.parseInt(taskNumber) - 1;
-            if (taskIndex < 0 || taskIndex >= taskCount) {
+            if (taskIndex < 0 || taskIndex >= tasks.size()) {
                 System.out.println("There is no task with that number.");
                 return;
             }
 
-            tasks[taskIndex].markAsDone();
+            tasks.get(taskIndex).markAsDone();
             System.out.println("Nice! I've marked this task as done:");
-            System.out.println("  " + tasks[taskIndex]);
+            System.out.println("  " + tasks.get(taskIndex));
         } catch (NumberFormatException exception) {
             System.out.println("Please specify a valid task number.");
         }
     }
 
     /** Marks the task identified by a one-based number as not done. */
-    private static void unmarkTask(String command, Task[] tasks, int taskCount) {
+    private static void unmarkTask(String command, ArrayList<Task> tasks) {
         String taskNumber = command.substring("unmark ".length()).trim();
         try {
             int taskIndex = Integer.parseInt(taskNumber) - 1;
-            if (taskIndex < 0 || taskIndex >= taskCount) {
+            if (taskIndex < 0 || taskIndex >= tasks.size()) {
                 System.out.println("There is no task with that number.");
                 return;
             }
 
-            tasks[taskIndex].markAsNotDone();
+            tasks.get(taskIndex).markAsNotDone();
             System.out.println("OK, I've marked this task as not done yet:");
-            System.out.println("  " + tasks[taskIndex]);
+            System.out.println("  " + tasks.get(taskIndex));
+        } catch (NumberFormatException exception) {
+            System.out.println("Please specify a valid task number.");
+        }
+    }
+
+    /** Deletes the task identified by a one-based number. */
+    private static void deleteTask(String command, ArrayList<Task> tasks) {
+        String taskNumber = command.substring("delete ".length()).trim();
+        try {
+            int taskIndex = Integer.parseInt(taskNumber) - 1;
+            if (taskIndex < 0 || taskIndex >= tasks.size()) {
+                System.out.println("There is no task with that number.");
+                return;
+            }
+
+            Task deletedTask = tasks.remove(taskIndex);
+            System.out.println("Noted. I've removed this task:");
+            System.out.println("  " + deletedTask);
+            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
         } catch (NumberFormatException exception) {
             System.out.println("Please specify a valid task number.");
         }

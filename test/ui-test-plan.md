@@ -1,5 +1,50 @@
 # Level 4 UI test plan
 
+## Test case: Delete tasks and preserve list state
+
+### Aim
+Verify deletion removes the selected task, updates the task count, and invalid deletion input does not terminate the chatbot.
+
+### Input
+```text
+todo one
+delete 1
+list
+delete nope
+bye
+```
+
+### Expected output
+```text
+ _   _  _____  __  __  _   _  _____
+| \ | || ____| \ \/ / | | | ||  ___|
+|  \| ||  _|    \  /  | | | || |___ 
+| |\  || |___   /  \  | |_| | ___| |
+|_| \_||_____| /_/\_\  \___/ |____/ 
+Hello! I'm Nexus.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+  [T][ ] one
+Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Noted. I've removed this task:
+  [T][ ] one
+Now you have 0 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+____________________________________________________________
+____________________________________________________________
+Please specify a valid task number.
+____________________________________________________________
+____________________________________________________________
+Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
 ## Test case: Interleave valid and invalid commands
 
 ### Aim
