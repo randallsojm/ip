@@ -40,12 +40,16 @@ public class Nexus {
             } else if (command.startsWith("unmark ")) {
                 unmarkTask(command, tasks, taskCount);
             } else if (taskCount < MAX_TASKS) {
-                Task newTask = parseTask(command);
-                tasks[taskCount] = newTask;
-                taskCount++;
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  " + newTask);
-                System.out.println("Now you have " + taskCount + " tasks in the list.");
+                try {
+                    Task newTask = parseTask(command);
+                    tasks[taskCount] = newTask;
+                    taskCount++;
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + newTask);
+                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                } catch (NexusException exception) {
+                    System.out.println("OOPS!!! " + exception.getMessage());
+                }
             } else {
                 System.out.println("Sorry, your task list is full.");
             }
@@ -55,28 +59,38 @@ public class Nexus {
     }
 
     /** Creates the task subtype represented by a command. */
-    private static Task parseTask(String command) {
-        if (command.startsWith("todo ")) {
-            return new Todo(command.substring("todo ".length()).trim());
-        }
-        if (command.startsWith("deadline ")) {
-            String body = command.substring("deadline ".length());
-            int marker = body.indexOf(" /by ");
-            if (marker >= 0) {
-                return new Deadline(body.substring(0, marker).trim(), body.substring(marker + 5).trim());
+    private static Task parseTask(String command) throws NexusException {
+        if (command.equals("todo") || command.startsWith("todo ")) {
+            String description = command.substring("todo".length()).trim();
+            if (description.isEmpty()) {
+                throw new NexusException("A todo needs a description.");
             }
+            return new Todo(description);
         }
-        if (command.startsWith("event ")) {
-            String body = command.substring("event ".length());
+        if (command.equals("deadline") || command.startsWith("deadline ")) {
+            String body = command.substring("deadline".length()).trim();
+            int marker = body.indexOf(" /by ");
+            if (marker < 0 || body.substring(0, marker).trim().isEmpty()
+                    || body.substring(marker + 5).trim().isEmpty()) {
+                throw new NexusException("A deadline needs a description and a /by date.");
+            }
+            return new Deadline(body.substring(0, marker).trim(), body.substring(marker + 5).trim());
+        }
+        if (command.equals("event") || command.startsWith("event ")) {
+            String body = command.substring("event".length()).trim();
             int fromMarker = body.indexOf(" /from ");
             int toMarker = body.indexOf(" /to ");
-            if (fromMarker >= 0 && toMarker > fromMarker) {
-                return new Event(body.substring(0, fromMarker).trim(),
-                        body.substring(fromMarker + 7, toMarker).trim(),
-                        body.substring(toMarker + 5).trim());
+            if (fromMarker < 0 || toMarker <= fromMarker
+                    || body.substring(0, fromMarker).trim().isEmpty()
+                    || body.substring(fromMarker + 7, toMarker).trim().isEmpty()
+                    || body.substring(toMarker + 5).trim().isEmpty()) {
+                throw new NexusException("An event needs a description, /from time, and /to time.");
             }
+            return new Event(body.substring(0, fromMarker).trim(),
+                    body.substring(fromMarker + 7, toMarker).trim(),
+                    body.substring(toMarker + 5).trim());
         }
-        return new Todo(command);
+        throw new NexusException("I'm sorry, but I don't know what that means.");
     }
 
     /** Marks the task identified by a one-based number as done. */
