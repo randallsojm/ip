@@ -17,6 +17,7 @@ public class Nexus {
 
         Scanner scanner = new Scanner(System.in);
         String[] tasks = new String[MAX_TASKS];
+        boolean[] completed = new boolean[MAX_TASKS];
         int taskCount = 0;
 
         while (scanner.hasNextLine()) {
@@ -31,12 +32,16 @@ public class Nexus {
 
             System.out.println(LINE);
             if (command.equals("list")) {
+                System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < taskCount; i++) {
-                    System.out.println((i + 1) + ". " + tasks[i]);
+                    String status = completed[i] ? "X" : " ";
+                    System.out.println((i + 1) + ".[" + status + "] " + tasks[i]);
                 }
+            } else if (command.startsWith("mark ")) {
+                markTask(command, tasks, completed, taskCount);
             } else if (taskCount < MAX_TASKS) {
-                taskCount++;
                 tasks[taskCount] = command;
+                taskCount++;
                 System.out.println("added: " + command);
             } else {
                 System.out.println("Sorry, your task list is full.");
@@ -44,5 +49,23 @@ public class Nexus {
             System.out.println(LINE);
         }
         scanner.close();
+    }
+
+    /** Marks the task identified by a one-based number as done. */
+    private static void markTask(String command, String[] tasks, boolean[] completed, int taskCount) {
+        String taskNumber = command.substring("mark ".length()).trim();
+        try {
+            int taskIndex = Integer.parseInt(taskNumber) - 1;
+            if (taskIndex < 0 || taskIndex >= taskCount) {
+                System.out.println("There is no task with that number.");
+                return;
+            }
+
+            completed[taskIndex] = true;
+            System.out.println("Nice! I've marked this task as done:");
+            System.out.println("  [X] " + tasks[taskIndex]);
+        } catch (NumberFormatException exception) {
+            System.out.println("Please specify a valid task number.");
+        }
     }
 }
