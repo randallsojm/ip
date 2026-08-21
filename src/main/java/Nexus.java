@@ -16,8 +16,7 @@ public class Nexus {
         System.out.println(LINE);
 
         Scanner scanner = new Scanner(System.in);
-        String[] tasks = new String[MAX_TASKS];
-        boolean[] completed = new boolean[MAX_TASKS];
+        Task[] tasks = new Task[MAX_TASKS];
         int taskCount = 0;
 
         while (scanner.hasNextLine()) {
@@ -34,15 +33,15 @@ public class Nexus {
             if (command.equals("list")) {
                 System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < taskCount; i++) {
-                    String status = completed[i] ? "X" : " ";
-                    System.out.println((i + 1) + ".[" + status + "] " + tasks[i]);
+                    System.out.println((i + 1) + ".[" + tasks[i].getStatusIcon() + "] "
+                            + tasks[i].getDescription());
                 }
             } else if (command.startsWith("mark ")) {
-                markTask(command, tasks, completed, taskCount);
+                markTask(command, tasks, taskCount);
             } else if (command.startsWith("unmark ")) {
-                unmarkTask(command, tasks, completed, taskCount);
+                unmarkTask(command, tasks, taskCount);
             } else if (taskCount < MAX_TASKS) {
-                tasks[taskCount] = command;
+                tasks[taskCount] = new Task(command);
                 taskCount++;
                 System.out.println("added: " + command);
             } else {
@@ -54,7 +53,7 @@ public class Nexus {
     }
 
     /** Marks the task identified by a one-based number as done. */
-    private static void markTask(String command, String[] tasks, boolean[] completed, int taskCount) {
+    private static void markTask(String command, Task[] tasks, int taskCount) {
         String taskNumber = command.substring("mark ".length()).trim();
         try {
             int taskIndex = Integer.parseInt(taskNumber) - 1;
@@ -63,16 +62,16 @@ public class Nexus {
                 return;
             }
 
-            completed[taskIndex] = true;
+            tasks[taskIndex].markAsDone();
             System.out.println("Nice! I've marked this task as done:");
-            System.out.println("  [X] " + tasks[taskIndex]);
+            System.out.println("  [X] " + tasks[taskIndex].getDescription());
         } catch (NumberFormatException exception) {
             System.out.println("Please specify a valid task number.");
         }
     }
 
     /** Marks the task identified by a one-based number as not done. */
-    private static void unmarkTask(String command, String[] tasks, boolean[] completed, int taskCount) {
+    private static void unmarkTask(String command, Task[] tasks, int taskCount) {
         String taskNumber = command.substring("unmark ".length()).trim();
         try {
             int taskIndex = Integer.parseInt(taskNumber) - 1;
@@ -81,9 +80,9 @@ public class Nexus {
                 return;
             }
 
-            completed[taskIndex] = false;
+            tasks[taskIndex].markAsNotDone();
             System.out.println("OK, I've marked this task as not done yet:");
-            System.out.println("  [ ] " + tasks[taskIndex]);
+            System.out.println("  [ ] " + tasks[taskIndex].getDescription());
         } catch (NumberFormatException exception) {
             System.out.println("Please specify a valid task number.");
         }
