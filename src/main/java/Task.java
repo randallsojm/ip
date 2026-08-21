@@ -30,4 +30,15 @@ public class Task {
     public void markAsNotDone() {
         done = false;
     }
+
+    /** Returns the one-letter type code used when displaying this task. */
+    public String getTypeIcon() {
+        return "T";
+    }
+
+    /** Returns the complete display representation of this task. */
+    @Override
+    public String toString() {
+        return "[" + getTypeIcon() + "][" + getStatusIcon() + "] " + description;
+    }
 }
