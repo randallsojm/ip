@@ -31,14 +31,14 @@ public class Task {
         done = false;
     }
 
-    /** Returns the one-letter type code used when displaying this task. */
-    public String getTypeIcon() {
-        return "T";
+    /** Returns the category of this task. */
+    public TaskType getTaskType() {
+        return TaskType.TODO;
     }
 
     /** Returns the complete display representation of this task. */
     @Override
     public String toString() {
-        return "[" + getTypeIcon() + "][" + getStatusIcon() + "] " + description;
+        return "[" + getTaskType().getIcon() + "][" + getStatusIcon() + "] " + description;
     }
 }
