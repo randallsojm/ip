@@ -1,2 +1,2 @@
-[D][ ] return book (by: Dec 02 2019)
-[D][ ] return book (by: Dec 22 2019)
+[T][ ] alpha
+[E][ ] gamma (from: 2pm to: 4pm)
