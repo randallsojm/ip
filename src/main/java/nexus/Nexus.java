@@ -1,3 +1,5 @@
+package nexus;
+
 import java.nio.file.Path;
 
 /** Coordinates Nexus's user interface, parser, task list, and storage. */

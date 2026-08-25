@@ -1,3 +1,5 @@
+package nexus;
+
 /**
  * Represents a task and its completion status.
  */

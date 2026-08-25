@@ -1,3 +1,5 @@
+package nexus;
+
 import java.util.Scanner;
 
 /** Handles user input and console output for Nexus. */
