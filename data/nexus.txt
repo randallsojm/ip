@@ -1,2 +1,1 @@
-[T][ ] alpha
-[E][ ] gamma (from: 2pm to: 4pm)
+[T][X] read book

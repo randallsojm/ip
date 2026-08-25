@@ -1,3 +1,5 @@
+package nexus;
+
 /** A task with a start date/time and an end date/time. */
 public class Event extends Task {
     private final String from;

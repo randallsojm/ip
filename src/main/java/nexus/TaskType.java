@@ -1,3 +1,5 @@
+package nexus;
+
 /** The fixed categories of tasks supported by Nexus. */
 public enum TaskType {
     TODO("T"),
