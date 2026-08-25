@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 public class Nexus {
     private static final String LINE = "____________________________________________________________";
+    private static final Storage STORAGE = new Storage(Path.of("data", "nexus.txt"));
 
     public static void main(String[] args) {
         String banner = " _   _  _____  __  __  _   _  _____\n"
@@ -44,6 +46,7 @@ public class Nexus {
                 try {
                     Task newTask = parseTask(command);
                     tasks.add(newTask);
+                    STORAGE.save(tasks);
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + newTask);
                     System.out.println("Now you have " + tasks.size() + " tasks in the list.");
@@ -102,6 +105,7 @@ public class Nexus {
             }
 
             tasks.get(taskIndex).markAsDone();
+            STORAGE.save(tasks);
             System.out.println("Nice! I've marked this task as done:");
             System.out.println("  " + tasks.get(taskIndex));
         } catch (NumberFormatException exception) {
@@ -120,6 +124,7 @@ public class Nexus {
             }
 
             tasks.get(taskIndex).markAsNotDone();
+            STORAGE.save(tasks);
             System.out.println("OK, I've marked this task as not done yet:");
             System.out.println("  " + tasks.get(taskIndex));
         } catch (NumberFormatException exception) {
@@ -138,6 +143,7 @@ public class Nexus {
             }
 
             Task deletedTask = tasks.remove(taskIndex);
+            STORAGE.save(tasks);
             System.out.println("Noted. I've removed this task:");
             System.out.println("  " + deletedTask);
             System.out.println("Now you have " + tasks.size() + " tasks in the list.");
