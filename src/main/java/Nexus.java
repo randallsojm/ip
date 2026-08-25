@@ -1,10 +1,15 @@
 import java.util.ArrayList;
 import java.nio.file.Path;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Nexus {
     private static final String LINE = "____________________________________________________________";
     private static final Storage STORAGE = new Storage(Path.of("data", "nexus.txt"));
+    private static final DateTimeFormatter INPUT_DATE_FORMAT =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static void main(String[] args) {
         String banner = " _   _  _____  __  __  _   _  _____\n"
@@ -75,7 +80,13 @@ public class Nexus {
                     || body.substring(marker + 5).trim().isEmpty()) {
                 throw new NexusException("A deadline needs a description and a /by date.");
             }
-            return new Deadline(body.substring(0, marker).trim(), body.substring(marker + 5).trim());
+            String dateText = body.substring(marker + 5).trim();
+            try {
+                LocalDate date = LocalDate.parse(dateText, INPUT_DATE_FORMAT);
+                return new Deadline(body.substring(0, marker).trim(), date);
+            } catch (DateTimeParseException exception) {
+                throw new NexusException("Please enter the deadline date in yyyy-MM-dd format.");
+            }
         }
         if (command.equals("event") || command.startsWith("event ")) {
             String body = command.substring("event".length()).trim();
