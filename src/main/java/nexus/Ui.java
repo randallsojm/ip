@@ -1,5 +1,6 @@
 package nexus;
 
+import java.util.List;
 import java.util.Scanner;
 
 /** Handles user input and console output for Nexus. */
@@ -43,6 +44,14 @@ public class Ui {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    /** Displays tasks matching a search keyword, or a message when none match. */
+    public void showMatchingTasks(List<Task> matchingTasks) {
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            System.out.println((i + 1) + "." + matchingTasks.get(i));
         }
     }
 

@@ -2,6 +2,8 @@ package nexus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 /** Owns and manages Nexus's collection of tasks. */
 public class TaskList {
@@ -55,5 +57,13 @@ public class TaskList {
     /** Returns a snapshot of the tasks. */
     public List<Task> asList() {
         return List.copyOf(tasks);
+    }
+
+    /** Returns tasks whose descriptions contain the keyword, ignoring letter case. */
+    public List<Task> find(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        return tasks.stream()
+                .filter(task -> task.getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword))
+                .collect(Collectors.toList());
     }
 }
