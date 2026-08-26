@@ -6,6 +6,7 @@ import java.time.format.DateTimeParseException;
 
 /** Converts user commands into tasks. */
 public class Parser {
+    /** Date format accepted in deadline commands. */
     private static final DateTimeFormatter INPUT_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /** Parses a task-creation command. */

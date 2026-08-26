@@ -33,6 +33,7 @@ public class Nexus {
         ui.close();
     }
 
+    /** Dispatches a command to the appropriate task or display operation. */
     private void handleCommand(String command) {
         if (command.equals("list")) {
             ui.showTasks(tasks);
@@ -47,6 +48,7 @@ public class Nexus {
         }
     }
 
+    /** Parses, stores, and reports a newly created task. */
     private void addTask(String command) {
         try {
             Task newTask = parser.parseTask(command);
@@ -60,6 +62,7 @@ public class Nexus {
         }
     }
 
+    /** Marks the task selected by a user command as complete. */
     private void markTask(String command) {
         Integer index = getTaskIndex(command, "mark ");
         if (index == null) return;
@@ -73,6 +76,7 @@ public class Nexus {
         System.out.println("  " + tasks.get(index));
     }
 
+    /** Marks the task selected by a user command as incomplete. */
     private void unmarkTask(String command) {
         Integer index = getTaskIndex(command, "unmark ");
         if (index == null) return;
@@ -86,6 +90,7 @@ public class Nexus {
         System.out.println("  " + tasks.get(index));
     }
 
+    /** Deletes the task selected by a user command and reports the result. */
     private void deleteTask(String command) {
         Integer index = getTaskIndex(command, "delete ");
         if (index == null) return;
@@ -100,6 +105,7 @@ public class Nexus {
         System.out.println("Now you have " + tasks.size() + " tasks in the list.");
     }
 
+    /** Converts a one-based task number in a command into a zero-based index. */
     private Integer getTaskIndex(String command, String prefix) {
         try {
             return Integer.parseInt(command.substring(prefix.length()).trim()) - 1;
