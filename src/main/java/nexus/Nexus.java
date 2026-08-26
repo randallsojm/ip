@@ -37,6 +37,8 @@ public class Nexus {
     private void handleCommand(String command) {
         if (command.equals("list")) {
             ui.showTasks(tasks);
+        } else if (command.equals("find") || command.startsWith("find ")) {
+            findTask(command);
         } else if (command.startsWith("mark ")) {
             markTask(command);
         } else if (command.startsWith("unmark ")) {
@@ -103,6 +105,16 @@ public class Nexus {
         System.out.println("Noted. I've removed this task:");
         System.out.println("  " + deletedTask);
         System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+    }
+
+    /** Finds and displays tasks whose descriptions contain the requested keyword. */
+    private void findTask(String command) {
+        String keyword = command.substring("find".length()).trim();
+        if (keyword.isEmpty()) {
+            System.out.println("Please provide a keyword to search for.");
+            return;
+        }
+        ui.showMatchingTasks(tasks.find(keyword));
     }
 
     /** Converts a one-based task number in a command into a zero-based index. */

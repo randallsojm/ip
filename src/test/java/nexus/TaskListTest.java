@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 /** Tests task storage, lookup, status changes, and deletion in {@link TaskList}. */
@@ -74,5 +76,40 @@ class TaskListTest {
         TaskList taskList = new TaskList();
 
         assertThrows(IndexOutOfBoundsException.class, () -> taskList.delete(0));
+    }
+
+    @Test
+    void find_matchingKeyword_returnsMatchingTasks() {
+        TaskList taskList = new TaskList(List.of(
+                new Todo("read book"),
+                new Todo("buy groceries"),
+                new Todo("return book")));
+
+        List<Task> matchingTasks = taskList.find("book");
+
+        assertEquals(2, matchingTasks.size());
+        assertEquals("read book", matchingTasks.get(0).getDescription());
+        assertEquals("return book", matchingTasks.get(1).getDescription());
+    }
+
+    @Test
+    void findKeyword_differentLetterCase_returnsMatchingTasks() {
+        TaskList taskList = new TaskList(List.of(new Todo("Read Book")));
+
+        assertEquals(1, taskList.find("book").size());
+    }
+
+    @Test
+    void find_noMatchingKeyword_returnsEmptyList() {
+        TaskList taskList = new TaskList(List.of(new Todo("read book")));
+
+        assertTrue(taskList.find("movie").isEmpty());
+    }
+
+    @Test
+    void find_emptyKeyword_returnsAllTasks() {
+        TaskList taskList = new TaskList(List.of(new Todo("read book"), new Todo("buy milk")));
+
+        assertEquals(2, taskList.find("").size());
     }
 }
