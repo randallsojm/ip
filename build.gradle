@@ -37,7 +37,8 @@ test {
 }
 
 application {
-    mainClass = 'seedu.duke.Duke'
+    // The fully qualified entry point used by both `run` and `shadowJar`.
+    mainClass = 'nexus.Nexus'
 }
 
 jar {
@@ -48,7 +49,8 @@ jar {
 }
 
 shadowJar {
-    archiveFileName = 'duke.jar'
+    // Produce one runnable JAR containing the application and its dependencies.
+    archiveFileName = 'nexus.jar'
 }
 
 run {
