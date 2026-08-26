@@ -5,6 +5,7 @@ public class Event extends Task {
     private final String from;
     private final String to;
 
+    /** Creates an event task with its description, start time, and end time. */
     public Event(String description, String from, String to) {
         super(description);
         this.from = from;

@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 /** Handles user input and console output for Nexus. */
 public class Ui {
+    /** Separator displayed between sections of console output. */
     private static final String LINE = "____________________________________________________________";
     private final Scanner scanner = new Scanner(System.in);
 

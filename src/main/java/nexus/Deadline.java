@@ -10,6 +10,7 @@ public class Deadline extends Task {
             DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH);
     private final LocalDate by;
 
+    /** Creates a deadline task with its description and due date. */
     public Deadline(String description, LocalDate by) {
         super(description);
         this.by = by;
