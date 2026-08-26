@@ -17,13 +17,19 @@ public class Ui {
     }
 
     /** Returns whether another command is available. */
-    public boolean hasNextCommand() { return scanner.hasNextLine(); }
+    public boolean hasNextCommand() {
+        return scanner.hasNextLine();
+    }
 
     /** Reads the next command. */
-    public String readCommand() { return scanner.nextLine(); }
+    public String readCommand() {
+        return scanner.nextLine();
+    }
 
     /** Displays the separator line. */
-    public void showLine() { System.out.println(LINE); }
+    public void showLine() {
+        System.out.println(LINE);
+    }
 
     /** Displays the goodbye message. */
     public void showGoodbye() {
@@ -41,5 +47,7 @@ public class Ui {
     }
 
     /** Closes the input source. */
-    public void close() { scanner.close(); }
+    public void close() {
+        scanner.close();
+    }
 }
