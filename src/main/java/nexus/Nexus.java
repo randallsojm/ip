@@ -67,7 +67,9 @@ public class Nexus {
     /** Marks the task selected by a user command as complete. */
     private void markTask(String command) {
         Integer index = getTaskIndex(command, "mark ");
-        if (index == null) return;
+        if (index == null) {
+            return;
+        }
         if (!tasks.hasIndex(index)) {
             System.out.println("There is no task with that number.");
             return;
@@ -81,7 +83,9 @@ public class Nexus {
     /** Marks the task selected by a user command as incomplete. */
     private void unmarkTask(String command) {
         Integer index = getTaskIndex(command, "unmark ");
-        if (index == null) return;
+        if (index == null) {
+            return;
+        }
         if (!tasks.hasIndex(index)) {
             System.out.println("There is no task with that number.");
             return;
@@ -95,7 +99,9 @@ public class Nexus {
     /** Deletes the task selected by a user command and reports the result. */
     private void deleteTask(String command) {
         Integer index = getTaskIndex(command, "delete ");
-        if (index == null) return;
+        if (index == null) {
+            return;
+        }
         if (!tasks.hasIndex(index)) {
             System.out.println("There is no task with that number.");
             return;

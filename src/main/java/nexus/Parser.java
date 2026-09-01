@@ -13,7 +13,9 @@ public class Parser {
     public Task parseTask(String command) throws NexusException {
         if (command.equals("todo") || command.startsWith("todo ")) {
             String description = command.substring("todo".length()).trim();
-            if (description.isEmpty()) throw new NexusException("A todo needs a description.");
+            if (description.isEmpty()) {
+                throw new NexusException("A todo needs a description.");
+            }
             return new Todo(description);
         }
         if (command.equals("deadline") || command.startsWith("deadline ")) {
