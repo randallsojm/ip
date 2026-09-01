@@ -11,7 +11,11 @@ public class Ui {
 
     /** Shows the welcome message. */
     public void showWelcome() {
-        System.out.println(" _   _  _____  __  __  _   _  _____\n| \\ | || ____| \\ \\/ / | | | ||  ___|\n|  \\| ||  _|    \\  /  | | | || |___ \n| |\\  || |___   /  \\  | |_| | ___| |\n|_| \\_||_____| /_/\\_\\  \\___/ |____/ ");
+        System.out.println(" _   _  _____  __  __  _   _  _____\n"
+                + "| \\ | || ____| \\ \\/ / | | | ||  ___|\n"
+                + "|  \\| ||  _|    \\  /  | | | || |___ \n"
+                + "| |\\  || |___   /  \\  | |_| | ___| |\n"
+                + "|_| \\_||_____| /_/\\_\\  \\___/ |____/ ");
         System.out.println("Hello! I'm Nexus.");
         System.out.println("What can I do for you?");
         showLine();
