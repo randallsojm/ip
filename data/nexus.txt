@@ -1,1 +1,2 @@
-[T][X] read book
+[T][X] read
+[D][ ] church (by: Feb 12 2016)
