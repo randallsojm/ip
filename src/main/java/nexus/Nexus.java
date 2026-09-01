@@ -27,109 +27,115 @@ public class Nexus {
                 break;
             }
             ui.showLine();
-            handleCommand(command);
+            System.out.println(executeCommand(command));
             ui.showLine();
         }
         ui.close();
     }
 
-    /** Dispatches a command to the appropriate task or display operation. */
-    private void handleCommand(String command) {
+    /** Executes a command and returns the response for a user interface to display. */
+    public String executeCommand(String command) {
+        StringBuilder response = new StringBuilder();
         if (command.equals("list")) {
-            ui.showTasks(tasks);
+            appendTasks(response, "Here are the tasks in your list:", tasks.asList());
         } else if (command.equals("find") || command.startsWith("find ")) {
-            findTask(command);
+            findTask(command, response);
         } else if (command.startsWith("mark ")) {
-            markTask(command);
+            markTask(command, response);
         } else if (command.startsWith("unmark ")) {
-            unmarkTask(command);
+            unmarkTask(command, response);
         } else if (command.startsWith("delete ")) {
-            deleteTask(command);
+            deleteTask(command, response);
         } else {
-            addTask(command);
+            addTask(command, response);
         }
+        return response.toString();
     }
 
     /** Parses, stores, and reports a newly created task. */
-    private void addTask(String command) {
+    private void addTask(String command, StringBuilder response) {
         try {
             Task newTask = parser.parseTask(command);
             tasks.add(newTask);
             storage.save(tasks.asList());
-            System.out.println("Got it. I've added this task:");
-            System.out.println("  " + newTask);
-            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+            response.append("Got it. I've added this task:\n  ").append(newTask)
+                    .append("\nNow you have ").append(tasks.size()).append(" tasks in the list.");
         } catch (NexusException exception) {
-            System.out.println("OOPS!!! " + exception.getMessage());
+            response.append("OOPS!!! ").append(exception.getMessage());
         }
     }
 
     /** Marks the task selected by a user command as complete. */
-    private void markTask(String command) {
-        Integer index = getTaskIndex(command, "mark ");
+    private void markTask(String command, StringBuilder response) {
+        Integer index = getTaskIndex(command, "mark ", response);
         if (index == null) {
             return;
         }
         if (!tasks.hasIndex(index)) {
-            System.out.println("There is no task with that number.");
+            response.append("There is no task with that number.");
             return;
         }
         tasks.mark(index);
         storage.save(tasks.asList());
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.println("  " + tasks.get(index));
+        response.append("Nice! I've marked this task as done:\n  ").append(tasks.get(index));
     }
 
     /** Marks the task selected by a user command as incomplete. */
-    private void unmarkTask(String command) {
-        Integer index = getTaskIndex(command, "unmark ");
+    private void unmarkTask(String command, StringBuilder response) {
+        Integer index = getTaskIndex(command, "unmark ", response);
         if (index == null) {
             return;
         }
         if (!tasks.hasIndex(index)) {
-            System.out.println("There is no task with that number.");
+            response.append("There is no task with that number.");
             return;
         }
         tasks.unmark(index);
         storage.save(tasks.asList());
-        System.out.println("OK, I've marked this task as not done yet:");
-        System.out.println("  " + tasks.get(index));
+        response.append("OK, I've marked this task as not done yet:\n  ").append(tasks.get(index));
     }
 
     /** Deletes the task selected by a user command and reports the result. */
-    private void deleteTask(String command) {
-        Integer index = getTaskIndex(command, "delete ");
+    private void deleteTask(String command, StringBuilder response) {
+        Integer index = getTaskIndex(command, "delete ", response);
         if (index == null) {
             return;
         }
         if (!tasks.hasIndex(index)) {
-            System.out.println("There is no task with that number.");
+            response.append("There is no task with that number.");
             return;
         }
         Task deletedTask = tasks.delete(index);
         storage.save(tasks.asList());
-        System.out.println("Noted. I've removed this task:");
-        System.out.println("  " + deletedTask);
-        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+        response.append("Noted. I've removed this task:\n  ").append(deletedTask)
+                .append("\nNow you have ").append(tasks.size()).append(" tasks in the list.");
     }
 
     /** Finds and displays tasks whose descriptions contain the requested keyword. */
-    private void findTask(String command) {
+    private void findTask(String command, StringBuilder response) {
         String keyword = command.substring("find".length()).trim();
         if (keyword.isEmpty()) {
-            System.out.println("Please provide a keyword to search for.");
+            response.append("Please provide a keyword to search for.");
             return;
         }
-        ui.showMatchingTasks(tasks.find(keyword));
+        appendTasks(response, "Here are the matching tasks in your list:", tasks.find(keyword));
     }
 
     /** Converts a one-based task number in a command into a zero-based index. */
-    private Integer getTaskIndex(String command, String prefix) {
+    private Integer getTaskIndex(String command, String prefix, StringBuilder response) {
         try {
             return Integer.parseInt(command.substring(prefix.length()).trim()) - 1;
         } catch (NumberFormatException exception) {
-            System.out.println("Please specify a valid task number.");
+            response.append("Please specify a valid task number.");
             return null;
+        }
+    }
+
+    /** Appends a task collection to a response. */
+    private void appendTasks(StringBuilder response, String heading, java.util.List<Task> taskList) {
+        response.append(heading);
+        for (int i = 0; i < taskList.size(); i++) {
+            response.append("\n").append(i + 1).append(".").append(taskList.get(i));
         }
     }
 
