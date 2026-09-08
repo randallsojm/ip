@@ -1,2 +1,2 @@
-[T][X] read
-[D][ ] church (by: Feb 12 2016)
+[T][ ] read
+[D][ ] CS2103T Assignment (by: Aug 19 2026)
