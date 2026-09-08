@@ -1,16 +1,20 @@
 package nexus;
 
+import java.time.LocalDate;
+
 /**
  * Represents a task and its completion status.
  */
 public class Task {
     private final String description;
     private boolean done;
+    private LocalDate snoozedUntil;
 
     /** Creates a new task that is initially not done. */
     public Task(String description) {
         this.description = description;
         this.done = false;
+        this.snoozedUntil = null;
     }
 
     /** Returns the task description. */
@@ -31,6 +35,16 @@ public class Task {
     /** Marks this task as not done. */
     public void markAsNotDone() {
         done = false;
+    }
+
+    /** Snoozes this task until the supplied date. */
+    public void snoozeUntil(LocalDate date) {
+        snoozedUntil = date;
+    }
+
+    /** Returns whether this task is hidden by an active snooze. */
+    public boolean isSnoozed(LocalDate date) {
+        return snoozedUntil != null && snoozedUntil.isAfter(date);
     }
 
     /** Returns the category of this task. */

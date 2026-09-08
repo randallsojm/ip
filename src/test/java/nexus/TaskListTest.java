@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -119,5 +120,14 @@ class TaskListTest {
         TaskList taskList = new TaskList(List.of(new Todo("read book"), new Todo("buy milk")));
 
         assertEquals(2, taskList.find("").size());
+    }
+
+    @Test
+    void visibleTasks_snoozedTaskIsHiddenUntilDate() {
+        TaskList taskList = new TaskList(List.of(new Todo("snoozed"), new Todo("visible")));
+        taskList.snooze(0, LocalDate.of(2026, 9, 15));
+
+        assertEquals(1, taskList.visibleTasks(LocalDate.of(2026, 9, 14)).size());
+        assertEquals(2, taskList.visibleTasks(LocalDate.of(2026, 9, 15)).size());
     }
 }

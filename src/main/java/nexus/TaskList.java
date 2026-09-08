@@ -1,5 +1,6 @@
 package nexus;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -59,6 +60,18 @@ public class TaskList {
     /** Returns a snapshot of the tasks. */
     public List<Task> asList() {
         return List.copyOf(tasks);
+    }
+
+    /** Returns tasks that are not snoozed on the supplied date. */
+    public List<Task> visibleTasks(LocalDate date) {
+        return tasks.stream()
+                .filter(task -> !task.isSnoozed(date))
+                .toList();
+    }
+
+    /** Snoozes a task until the supplied date. */
+    public void snooze(int index, LocalDate date) {
+        tasks.get(index).snoozeUntil(date);
     }
 
     /** Returns tasks whose descriptions contain the keyword, ignoring letter case. */
