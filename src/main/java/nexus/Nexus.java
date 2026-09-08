@@ -1,9 +1,15 @@
 package nexus;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.nio.file.Path;
 
 /** Coordinates Nexus's user interface, parser, task list, and storage. */
 public class Nexus {
+    private static final DateTimeFormatter SNOOZE_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final String SNOOZE_PREFIX = "snooze ";
+    private static final String SNOOZE_UNTIL_MARKER = " /until ";
     private final Storage storage;
     private final TaskList tasks;
     private final Ui ui;
@@ -37,7 +43,7 @@ public class Nexus {
     public String executeCommand(String command) {
         StringBuilder response = new StringBuilder();
         if (command.equals("list")) {
-            appendTasks(response, "Here are the tasks in your list:", tasks.asList());
+            appendTasks(response, "Here are the tasks in your list:", tasks.visibleTasks(LocalDate.now()));
         } else if (command.equals("find") || command.startsWith("find ")) {
             findTask(command, response);
         } else if (command.startsWith("mark ")) {
@@ -46,6 +52,8 @@ public class Nexus {
             unmarkTask(command, response);
         } else if (command.startsWith("delete ")) {
             deleteTask(command, response);
+        } else if (command.startsWith(SNOOZE_PREFIX)) {
+            snoozeTask(command, response);
         } else {
             addTask(command, response);
         }
@@ -109,6 +117,37 @@ public class Nexus {
         storage.save(tasks.asList());
         response.append("Noted. I've removed this task:\n  ").append(deletedTask)
                 .append("\nNow you have ").append(tasks.size()).append(" tasks in the list.");
+    }
+
+    /** Snoozes the selected task until a future date. */
+    private void snoozeTask(String command, StringBuilder response) {
+        int marker = command.indexOf(SNOOZE_UNTIL_MARKER);
+        if (marker < SNOOZE_PREFIX.length()) {
+            response.append("Use: snooze <task number> /until yyyy-MM-dd");
+            return;
+        }
+
+        Integer index = getTaskIndex(command.substring(0, marker), SNOOZE_PREFIX, response);
+        if (index == null || !tasks.hasIndex(index)) {
+            if (index != null) {
+                response.append("There is no task with that number.");
+            }
+            return;
+        }
+
+        try {
+            LocalDate date = LocalDate.parse(
+                    command.substring(marker + SNOOZE_UNTIL_MARKER.length()).trim(), SNOOZE_DATE_FORMAT);
+            if (!date.isAfter(LocalDate.now())) {
+                response.append("Please provide a future snooze date.");
+                return;
+            }
+            tasks.snooze(index, date);
+            storage.save(tasks.asList());
+            response.append("Snoozed this task until ").append(date).append(":\n  ").append(tasks.get(index));
+        } catch (DateTimeParseException exception) {
+            response.append("Please enter the snooze date in yyyy-MM-dd format.");
+        }
     }
 
     /** Finds and displays tasks whose descriptions contain the requested keyword. */

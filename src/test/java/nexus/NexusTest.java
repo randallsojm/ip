@@ -22,4 +22,18 @@ class NexusTest {
         assertTrue(addResponse.contains("I've added this task"));
         assertTrue(listResponse.contains("read JavaFX tutorial"));
     }
+
+    @Test
+    void executeCommand_snoozeTask_hidesItFromList() {
+        Nexus nexus = new Nexus(temporaryDirectory.resolve("nexus.txt").toString());
+
+        nexus.executeCommand("todo prepare presentation");
+        String snoozeResponse = nexus.executeCommand("snooze 1 /until 2099-01-01");
+        String listResponse = nexus.executeCommand("list");
+        String findResponse = nexus.executeCommand("find presentation");
+
+        assertTrue(snoozeResponse.contains("Snoozed this task until 2099-01-01"));
+        assertTrue(!listResponse.contains("prepare presentation"));
+        assertTrue(findResponse.contains("prepare presentation"));
+    }
 }
