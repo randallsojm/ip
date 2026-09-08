@@ -36,6 +36,14 @@ class TaskListTest {
     }
 
     @Test
+    void constructorAndAdd_nullValues_throwAssertionError() {
+        assertThrows(AssertionError.class, () -> new TaskList(null));
+
+        TaskList taskList = new TaskList();
+        assertThrows(AssertionError.class, () -> taskList.add(null));
+    }
+
+    @Test
     void get_invalidIndex_throwsException() {
         TaskList taskList = new TaskList();
         taskList.add(new Todo("task"));

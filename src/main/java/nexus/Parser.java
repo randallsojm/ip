@@ -25,6 +25,7 @@ public class Parser {
                     || body.substring(marker + 5).trim().isEmpty()) {
                 throw new NexusException("A deadline needs a description and a /by date.");
             }
+            assert marker >= 0 : "Validated deadline command must contain a /by marker";
             try {
                 LocalDate date = LocalDate.parse(body.substring(marker + 5).trim(), INPUT_DATE_FORMAT);
                 return new Deadline(body.substring(0, marker).trim(), date);
@@ -41,6 +42,8 @@ public class Parser {
                     || body.substring(toMarker + 5).trim().isEmpty()) {
                 throw new NexusException("An event needs a description, /from time, and /to time.");
             }
+            assert fromMarker >= 0 && toMarker > fromMarker
+                    : "Validated event command must contain ordered time markers";
             return new Event(body.substring(0, fromMarker).trim(), body.substring(fromMarker + 7, toMarker).trim(),
                     body.substring(toMarker + 5).trim());
         }
