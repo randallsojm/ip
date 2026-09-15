@@ -17,13 +17,20 @@ public class TaskList {
 
     /** Creates a task list containing the supplied tasks. */
     public TaskList(List<Task> tasks) {
-        assert tasks != null : "Task list source must not be null";
+        if (tasks == null) {
+            throw new IllegalArgumentException("Task list source must not be null.");
+        }
         this.tasks = new ArrayList<>(tasks);
     }
 
     /** Adds a task. */
     public void add(Task task) {
-        assert task != null : "Task must not be null";
+        if (task == null) {
+            throw new IllegalArgumentException("Task must not be null.");
+        }
+        if (tasks.stream().anyMatch(existing -> existing.toString().equals(task.toString()))) {
+            throw new IllegalArgumentException("A task with the same details already exists.");
+        }
         tasks.add(task);
     }
 

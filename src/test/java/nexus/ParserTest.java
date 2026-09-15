@@ -61,4 +61,17 @@ class ParserTest {
     void parseTask_unknownCommand_throwsException() {
         assertThrows(NexusException.class, () -> parser.parseTask("list"));
     }
+
+    @Test
+    void parseTask_malformedSpacingOrDuplicateMarker_throwsException() {
+        assertThrows(NexusException.class, () -> parser.parseTask(" todo task"));
+        assertThrows(NexusException.class, () -> parser.parseTask("todo  task"));
+        assertThrows(NexusException.class, () -> parser.parseTask("deadline task /by 2026-01-01 /by 2026-01-02"));
+    }
+
+    @Test
+    void parseTask_eventThatDoesNotEndAfterStart_throwsException() {
+        assertThrows(NexusException.class, () -> parser.parseTask("event meeting /from 10:00 /to 10:00"));
+        assertThrows(NexusException.class, () -> parser.parseTask("event meeting /from 2026-02-30T10:00 /to 2026-03-01T10:00"));
+    }
 }
