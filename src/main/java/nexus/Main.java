@@ -14,12 +14,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-/** Provides the JavaFX graphical interface for Nexus. */
+/** Provides the JavaFX graphical interface for Orbit. */
 public class Main extends Application {
-    private static final String BACKGROUND = "#f7f8fc";
-    private static final String PRIMARY = "#4f46e5";
-    private static final String TEXT = "#172033";
-    private static final String ERROR = "#b42318";
+    private static final String BACKGROUND = "#071525";
+    private static final String PRIMARY = "#16b8a6";
+    private static final String TEXT = "#dcecf5";
+    private static final String ERROR = "#ff8a8a";
     private final Nexus nexus = new Nexus("data/nexus.txt");
 
     /** Builds and displays the responsive Nexus window. */
@@ -28,7 +28,7 @@ public class Main extends Application {
         VBox messages = new VBox(12);
         messages.setPadding(new Insets(20, 18, 20, 18));
         messages.setStyle("-fx-background-color: " + BACKGROUND + ";");
-        addBotMessage(messages, "Hello! I'm Nexus.\nWhat can I do for you?");
+        addBotMessage(messages, "✦ Orbit online.\nGive me a task, and I’ll keep it in your flight plan.");
 
         ScrollPane history = new ScrollPane(messages);
         history.setFitToWidth(true);
@@ -36,16 +36,17 @@ public class Main extends Application {
         history.setStyle("-fx-background: " + BACKGROUND + "; -fx-background-color: " + BACKGROUND + ";");
 
         TextField input = new TextField();
-        input.setPromptText("Try: list, find, mark 1, or add a task");
-        input.setStyle("-fx-font-size: 14px; -fx-padding: 11px 13px; -fx-background-radius: 9px;");
-        Button send = new Button("Send");
+        input.setPromptText("Try: list, find, mark 1, or add a waypoint");
+        input.setStyle("-fx-font-family: 'Consolas'; -fx-font-size: 14px; -fx-padding: 11px 13px;"
+                + " -fx-background-radius: 9px; -fx-background-color: #10263a; -fx-text-fill: " + TEXT + ";");
+        Button send = new Button("Launch");
         send.setDefaultButton(true);
         send.setStyle("-fx-background-color: " + PRIMARY + "; -fx-text-fill: white;"
                 + " -fx-font-weight: bold; -fx-padding: 11px 18px; -fx-background-radius: 9px;");
         HBox controls = new HBox(10, input, send);
         controls.setAlignment(Pos.CENTER);
         controls.setPadding(new Insets(12, 18, 16, 18));
-        controls.setStyle("-fx-background-color: white; -fx-border-color: #e4e7ec; -fx-border-width: 1px 0 0 0;");
+        controls.setStyle("-fx-background-color: #0b1d30; -fx-border-color: #1e4053; -fx-border-width: 1px 0 0 0;");
         HBox.setHgrow(input, Priority.ALWAYS);
 
         Runnable submit = () -> {
@@ -70,7 +71,7 @@ public class Main extends Application {
         root.setBottom(controls);
         root.setStyle("-fx-background-color: " + BACKGROUND + ";");
         Scene scene = new Scene(root, 600, 450);
-        stage.setTitle("Nexus");
+        stage.setTitle("Orbit — Mission Control");
         stage.setMinWidth(360);
         stage.setMinHeight(300);
         stage.setScene(scene);
@@ -87,8 +88,8 @@ public class Main extends Application {
 
     /** Adds a Nexus response using a spacious, left-aligned treatment. */
     private void addBotMessage(VBox messages, String text) {
-        Label message = createMessage(text, "-fx-background-color: white; -fx-text-fill: " + TEXT + ";"
-                + " -fx-border-color: #e4e7ec; -fx-border-width: 1px;");
+        Label message = createMessage("✦  " + text, "-fx-background-color: #10263a; -fx-text-fill: " + TEXT + ";"
+                + " -fx-border-color: #1e4053; -fx-border-width: 1px;");
         HBox row = new HBox(message);
         row.setAlignment(Pos.CENTER_LEFT);
         messages.getChildren().add(row);
@@ -109,13 +110,16 @@ public class Main extends Application {
         message.setWrapText(true);
         message.setMaxWidth(Double.MAX_VALUE);
         message.setPadding(new Insets(10, 13, 10, 13));
-        message.setStyle(colors + " -fx-font-size: 14px; -fx-line-spacing: 2px; -fx-background-radius: 11px;");
+        message.setStyle(colors + " -fx-font-family: 'Consolas'; -fx-font-size: 14px; -fx-line-spacing: 2px;"
+                + " -fx-background-radius: 11px;");
         return message;
     }
 
     /** Returns whether a response describes an invalid or unsuccessful command. */
     private boolean isError(String response) {
         return response.startsWith("OOPS!!!") || response.startsWith("Please")
-                || response.startsWith("There is no task") || response.startsWith("Use:");
+                || response.startsWith("There is no task") || response.startsWith("Orbit protocol:")
+                || response.startsWith("The jump date") || response.startsWith("Enter the jump date")
+                || response.startsWith("Give me a signal") || response.startsWith("Specify a valid");
     }
 }

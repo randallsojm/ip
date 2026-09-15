@@ -19,7 +19,7 @@ class NexusTest {
         String addResponse = nexus.executeCommand("todo read JavaFX tutorial");
         String listResponse = nexus.executeCommand("list");
 
-        assertTrue(addResponse.contains("I've added this task"));
+        assertTrue(addResponse.contains("I’ve added this waypoint"));
         assertTrue(listResponse.contains("read JavaFX tutorial"));
     }
 
@@ -32,7 +32,7 @@ class NexusTest {
         String listResponse = nexus.executeCommand("list");
         String findResponse = nexus.executeCommand("find presentation");
 
-        assertTrue(snoozeResponse.contains("Snoozed this task until 2099-01-01"));
+        assertTrue(snoozeResponse.contains("Waypoint placed in orbit until 2099-01-01"));
         assertTrue(!listResponse.contains("prepare presentation"));
         assertTrue(findResponse.contains("prepare presentation"));
     }
