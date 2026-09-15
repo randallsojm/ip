@@ -3,7 +3,7 @@ package nexus;
 import java.util.List;
 import java.util.Scanner;
 
-/** Handles user input and console output for Nexus. */
+/** Handles user input and console output for Orbit, the calm mission-control assistant. */
 public class Ui {
     /** Separator displayed between sections of console output. */
     private static final String LINE = "____________________________________________________________";
@@ -11,13 +11,13 @@ public class Ui {
 
     /** Shows the welcome message. */
     public void showWelcome() {
-        System.out.println(" _   _  _____  __  __  _   _  _____\n"
-                + "| \\ | || ____| \\ \\/ / | | | ||  ___|\n"
-                + "|  \\| ||  _|    \\  /  | | | || |___ \n"
-                + "| |\\  || |___   /  \\  | |_| | ___| |\n"
-                + "|_| \\_||_____| /_/\\_\\  \\___/ |____/ ");
-        System.out.println("Hello! I'm Nexus.");
-        System.out.println("What can I do for you?");
+        System.out.println("   ___   ____   ____  _____ _____\n"
+                + "  / _ \\ |  _ \\ / ___||_   _| ____|\n"
+                + " | | | || |_) |\\___ \\  | | |  _|\n"
+                + " | |_| ||  _ <  ___) | | | | |___\n"
+                + "  \\___/ |_| \\_\\|____/  |_| |_____|");
+        System.out.println("Orbit online. Your quiet mission-control companion is ready.");
+        System.out.println("Give me a task, and I’ll keep it in your flight plan.");
         showLine();
     }
 
@@ -39,13 +39,13 @@ public class Ui {
     /** Displays the goodbye message. */
     public void showGoodbye() {
         showLine();
-        System.out.println("Bye. Hope to see you again soon!");
+        System.out.println("Orbit signing off. Keep your trajectory steady!");
         showLine();
     }
 
     /** Displays all tasks. */
     public void showTasks(TaskList tasks) {
-        System.out.println("Here are the tasks in your list:");
+        System.out.println("Flight plan telemetry:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
         }
@@ -53,7 +53,7 @@ public class Ui {
 
     /** Displays tasks matching a search keyword, or a message when none match. */
     public void showMatchingTasks(List<Task> matchingTasks) {
-        System.out.println("Here are the matching tasks in your list:");
+        System.out.println("Matching signals from your flight plan:");
         for (int i = 0; i < matchingTasks.size(); i++) {
             System.out.println((i + 1) + "." + matchingTasks.get(i));
         }

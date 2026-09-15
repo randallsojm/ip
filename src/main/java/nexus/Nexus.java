@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.nio.file.Path;
 
-/** Coordinates Nexus's user interface, parser, task list, and storage. */
+/** Coordinates Orbit's user interface, parser, task list, and storage. */
 public class Nexus {
     private static final DateTimeFormatter SNOOZE_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final String SNOOZE_PREFIX = "snooze ";
@@ -43,7 +43,7 @@ public class Nexus {
     public String executeCommand(String command) {
         StringBuilder response = new StringBuilder();
         if (command.equals("list")) {
-            appendTasks(response, "Here are the tasks in your list:", tasks.visibleTasks(LocalDate.now()));
+            appendTasks(response, "Flight plan telemetry:", tasks.visibleTasks(LocalDate.now()));
         } else if (command.equals("find") || command.startsWith("find ")) {
             findTask(command, response);
         } else if (command.startsWith("mark ")) {
@@ -66,8 +66,8 @@ public class Nexus {
             Task newTask = parser.parseTask(command);
             tasks.add(newTask);
             storage.save(tasks.asList());
-            response.append("Got it. I've added this task:\n  ").append(newTask)
-                    .append("\nNow you have ").append(tasks.size()).append(" tasks in the list.");
+            response.append("Mission logged. I’ve added this waypoint:\n  ").append(newTask)
+                    .append("\nYour flight plan now has ").append(tasks.size()).append(" tasks.");
         } catch (NexusException exception) {
             response.append("OOPS!!! ").append(exception.getMessage());
         }
@@ -85,7 +85,7 @@ public class Nexus {
         }
         tasks.mark(index);
         storage.save(tasks.asList());
-        response.append("Nice! I've marked this task as done:\n  ").append(tasks.get(index));
+        response.append("Waypoint secured. This task is complete:\n  ").append(tasks.get(index));
     }
 
     /** Marks the task selected by a user command as incomplete. */
@@ -100,7 +100,7 @@ public class Nexus {
         }
         tasks.unmark(index);
         storage.save(tasks.asList());
-        response.append("OK, I've marked this task as not done yet:\n  ").append(tasks.get(index));
+        response.append("Copy that. This waypoint is back on the active route:\n  ").append(tasks.get(index));
     }
 
     /** Deletes the task selected by a user command and reports the result. */
@@ -115,15 +115,15 @@ public class Nexus {
         }
         Task deletedTask = tasks.delete(index);
         storage.save(tasks.asList());
-        response.append("Noted. I've removed this task:\n  ").append(deletedTask)
-                .append("\nNow you have ").append(tasks.size()).append(" tasks in the list.");
+        response.append("Waypoint cleared from the flight plan:\n  ").append(deletedTask)
+                .append("\nYour flight plan now has ").append(tasks.size()).append(" tasks.");
     }
 
     /** Snoozes the selected task until a future date. */
     private void snoozeTask(String command, StringBuilder response) {
         int marker = command.indexOf(SNOOZE_UNTIL_MARKER);
         if (marker < SNOOZE_PREFIX.length()) {
-            response.append("Use: snooze <task number> /until yyyy-MM-dd");
+            response.append("Orbit protocol: snooze <task number> /until yyyy-MM-dd");
             return;
         }
 
@@ -139,14 +139,14 @@ public class Nexus {
             LocalDate date = LocalDate.parse(
                     command.substring(marker + SNOOZE_UNTIL_MARKER.length()).trim(), SNOOZE_DATE_FORMAT);
             if (!date.isAfter(LocalDate.now())) {
-                response.append("Please provide a future snooze date.");
+                response.append("The jump date must be in the future.");
                 return;
             }
             tasks.snooze(index, date);
             storage.save(tasks.asList());
-            response.append("Snoozed this task until ").append(date).append(":\n  ").append(tasks.get(index));
+            response.append("Waypoint placed in orbit until ").append(date).append(":\n  ").append(tasks.get(index));
         } catch (DateTimeParseException exception) {
-            response.append("Please enter the snooze date in yyyy-MM-dd format.");
+            response.append("Enter the jump date in yyyy-MM-dd format.");
         }
     }
 
@@ -154,10 +154,10 @@ public class Nexus {
     private void findTask(String command, StringBuilder response) {
         String keyword = command.substring("find".length()).trim();
         if (keyword.isEmpty()) {
-            response.append("Please provide a keyword to search for.");
+            response.append("Give me a signal keyword to scan for.");
             return;
         }
-        appendTasks(response, "Here are the matching tasks in your list:", tasks.find(keyword));
+        appendTasks(response, "Matching signals from your flight plan:", tasks.find(keyword));
     }
 
     /** Converts a one-based task number in a command into a zero-based index. */
@@ -165,7 +165,7 @@ public class Nexus {
         try {
             return Integer.parseInt(command.substring(prefix.length()).trim()) - 1;
         } catch (NumberFormatException exception) {
-            response.append("Please specify a valid task number.");
+            response.append("Specify a valid waypoint number.");
             return null;
         }
     }
