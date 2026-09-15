@@ -20,8 +20,26 @@ public class Storage {
         if (!Files.exists(filePath)) {
             return new ArrayList<>();
         }
-        // Reading existing task records will be added once the file format is formalised.
-        return new ArrayList<>();
+        try {
+            List<Task> loaded = new ArrayList<>();
+            for (String line : Files.readAllLines(filePath)) {
+                if (!line.isBlank()) {
+                    loaded.add(parseRecord(line));
+                }
+            }
+            return loaded;
+        } catch (IOException | IllegalArgumentException exception) {
+            System.out.println("OOPS!!! I couldn't read your saved tasks. Starting with an empty list.");
+            return new ArrayList<>();
+        }
+    }
+
+    /** Parses the current human-readable task format, rejecting corrupt records. */
+    private Task parseRecord(String line) {
+        if (line.startsWith("[T][ ] ") || line.startsWith("[T][X] ")) {
+            return new Todo(line.substring(7));
+        }
+        throw new IllegalArgumentException("Unrecognised task record.");
     }
 
     /**
@@ -29,6 +47,9 @@ public class Storage {
      * they do not exist yet.
      */
     public void save(List<Task> tasks) {
+        if (tasks == null) {
+            throw new IllegalArgumentException("Tasks must not be null.");
+        }
         try {
             Path parent = filePath.getParent();
             if (parent != null) {
@@ -40,8 +61,9 @@ public class Storage {
                     .reduce((first, second) -> first + System.lineSeparator() + second)
                     .orElse("");
             Files.writeString(filePath, content);
-        } catch (IOException exception) {
-            System.out.println("OOPS!!! I couldn't save your tasks.");
+        } catch (IOException | SecurityException exception) {
+            throw new IllegalStateException(
+                    "I couldn't save your tasks. Check file permissions and try again.", exception);
         }
     }
 }

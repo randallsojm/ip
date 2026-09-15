@@ -1,9 +1,9 @@
 package nexus;
 
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.nio.file.Path;
 
 /** Coordinates Orbit's user interface, parser, task list, and storage. */
 public class Nexus {
@@ -42,6 +42,12 @@ public class Nexus {
     /** Executes a command and returns the response for a user interface to display. */
     public String executeCommand(String command) {
         StringBuilder response = new StringBuilder();
+        if (command == null || command.isBlank()) {
+            return "OOPS!!! Please enter a command.";
+        }
+        if (!command.equals(command.trim()) || command.matches(".*\\s{2,}.*")) {
+            return "OOPS!!! Commands must not have leading, trailing, or repeated spaces.";
+        }
         if (command.equals("list")) {
             appendTasks(response, "Flight plan telemetry:", tasks.visibleTasks(LocalDate.now()));
         } else if (command.equals("find") || command.startsWith("find ")) {
@@ -54,8 +60,11 @@ public class Nexus {
             deleteTask(command, response);
         } else if (command.startsWith(SNOOZE_PREFIX)) {
             snoozeTask(command, response);
-        } else {
+        } else if (command.startsWith("todo") || command.startsWith("deadline")
+                || command.startsWith("event")) {
             addTask(command, response);
+        } else {
+            response.append("OOPS!!! I'm sorry, but I don't know what that means.");
         }
         return response.toString();
     }
@@ -68,7 +77,7 @@ public class Nexus {
             storage.save(tasks.asList());
             response.append("Mission logged. I’ve added this waypoint:\n  ").append(newTask)
                     .append("\nYour flight plan now has ").append(tasks.size()).append(" tasks.");
-        } catch (NexusException exception) {
+        } catch (NexusException | IllegalArgumentException exception) {
             response.append("OOPS!!! ").append(exception.getMessage());
         }
     }

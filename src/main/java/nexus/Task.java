@@ -12,6 +12,10 @@ public class Task {
 
     /** Creates a new task that is initially not done. */
     public Task(String description) {
+        if (description == null || description.isBlank() || description.contains("\n")
+                || description.contains("\r")) {
+            throw new IllegalArgumentException("Task description must not be empty or contain line breaks.");
+        }
         this.description = description;
         this.done = false;
         this.snoozedUntil = null;

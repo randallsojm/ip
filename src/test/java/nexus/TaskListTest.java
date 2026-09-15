@@ -37,11 +37,18 @@ class TaskListTest {
     }
 
     @Test
-    void constructorAndAdd_nullValues_throwAssertionError() {
-        assertThrows(AssertionError.class, () -> new TaskList(null));
+    void constructorAndAdd_nullValues_throwException() {
+        assertThrows(IllegalArgumentException.class, () -> new TaskList(null));
 
         TaskList taskList = new TaskList();
-        assertThrows(AssertionError.class, () -> taskList.add(null));
+        assertThrows(IllegalArgumentException.class, () -> taskList.add(null));
+    }
+
+    @Test
+    void add_duplicateTask_throwsException() {
+        TaskList taskList = new TaskList();
+        taskList.add(new Todo("same task"));
+        assertThrows(IllegalArgumentException.class, () -> taskList.add(new Todo("same task")));
     }
 
     @Test
