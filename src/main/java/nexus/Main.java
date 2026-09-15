@@ -14,7 +14,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-/** Provides the JavaFX graphical interface for Orbit. */
+/** Provides the JavaFX graphical interface for Nexus. */
 public class Main extends Application {
     private static final String BACKGROUND = "#071525";
     private static final String PRIMARY = "#16b8a6";
@@ -28,7 +28,7 @@ public class Main extends Application {
         VBox messages = new VBox(12);
         messages.setPadding(new Insets(20, 18, 20, 18));
         messages.setStyle("-fx-background-color: " + BACKGROUND + ";");
-        addBotMessage(messages, "✦ Orbit online.\nGive me a task, and I’ll keep it in your flight plan.");
+        addBotMessage(messages, "✦ Nexus online.\nGive me a task, and I’ll keep it in your flight plan.");
 
         ScrollPane history = new ScrollPane(messages);
         history.setFitToWidth(true);
@@ -71,7 +71,7 @@ public class Main extends Application {
         root.setBottom(controls);
         root.setStyle("-fx-background-color: " + BACKGROUND + ";");
         Scene scene = new Scene(root, 600, 450);
-        stage.setTitle("Orbit — Mission Control");
+        stage.setTitle("Nexus — Mission Control");
         stage.setMinWidth(360);
         stage.setMinHeight(300);
         stage.setScene(scene);
@@ -118,7 +118,7 @@ public class Main extends Application {
     /** Returns whether a response describes an invalid or unsuccessful command. */
     private boolean isError(String response) {
         return response.startsWith("OOPS!!!") || response.startsWith("Please")
-                || response.startsWith("There is no task") || response.startsWith("Orbit protocol:")
+                || response.startsWith("There is no task") || response.startsWith("Nexus protocol:")
                 || response.startsWith("The jump date") || response.startsWith("Enter the jump date")
                 || response.startsWith("Give me a signal") || response.startsWith("Specify a valid");
     }

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-/** Coordinates Orbit's user interface, parser, task list, and storage. */
+/** Coordinates Nexus's user interface, parser, task list, and storage. */
 public class Nexus {
     private static final DateTimeFormatter SNOOZE_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final String SNOOZE_PREFIX = "snooze ";
@@ -132,7 +132,7 @@ public class Nexus {
     private void snoozeTask(String command, StringBuilder response) {
         int marker = command.indexOf(SNOOZE_UNTIL_MARKER);
         if (marker < SNOOZE_PREFIX.length()) {
-            response.append("Orbit protocol: snooze <task number> /until yyyy-MM-dd");
+            response.append("Nexus protocol: snooze <task number> /until yyyy-MM-dd");
             return;
         }
 

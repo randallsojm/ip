@@ -56,7 +56,7 @@ class NexusTest {
     void executeCommand_snoozeValidation_rejectsMalformedDatesAndCommands() {
         Nexus nexus = new Nexus(temporaryDirectory.resolve("nexus.txt").toString());
 
-        assertTrue(nexus.executeCommand("snooze 1").contains("Orbit protocol"));
+        assertTrue(nexus.executeCommand("snooze 1").contains("Nexus protocol"));
         assertTrue(nexus.executeCommand("snooze nope /until 2099-01-01").contains("valid waypoint"));
         nexus.executeCommand("todo task");
         assertTrue(nexus.executeCommand("snooze 1 /until 2020-01-01").contains("future"));

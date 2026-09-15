@@ -1,2 +1,2 @@
-[T][ ] read
-[D][ ] CS2103T Assignment (by: Aug 19 2026)
+[T][X] read textbook
+[D][ ] submit assignment (by: Sep 20 2026)

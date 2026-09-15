@@ -3,7 +3,7 @@ package nexus;
 import java.util.List;
 import java.util.Scanner;
 
-/** Handles user input and console output for Orbit, the calm mission-control assistant. */
+/** Handles user input and console output for Nexus, the calm mission-control assistant. */
 public class Ui {
     /** Separator displayed between sections of console output. */
     private static final String LINE = "____________________________________________________________";
@@ -11,12 +11,8 @@ public class Ui {
 
     /** Shows the welcome message. */
     public void showWelcome() {
-        System.out.println("   ___   ____   ____  _____ _____\n"
-                + "  / _ \\ |  _ \\ / ___||_   _| ____|\n"
-                + " | | | || |_) |\\___ \\  | | |  _|\n"
-                + " | |_| ||  _ <  ___) | | | | |___\n"
-                + "  \\___/ |_| \\_\\|____/  |_| |_____|");
-        System.out.println("Orbit online. Your quiet mission-control companion is ready.");
+        System.out.println("NEXUS");
+        System.out.println("Nexus online. Your quiet mission-control companion is ready.");
         System.out.println("Give me a task, and I’ll keep it in your flight plan.");
         showLine();
     }
@@ -39,7 +35,7 @@ public class Ui {
     /** Displays the goodbye message. */
     public void showGoodbye() {
         showLine();
-        System.out.println("Orbit signing off. Keep your trajectory steady!");
+        System.out.println("Nexus signing off. Keep your trajectory steady!");
         showLine();
     }
 
