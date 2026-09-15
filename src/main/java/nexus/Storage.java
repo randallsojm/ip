@@ -37,7 +37,11 @@ public class Storage {
     /** Parses the current human-readable task format, rejecting corrupt records. */
     private Task parseRecord(String line) {
         if (line.startsWith("[T][ ] ") || line.startsWith("[T][X] ")) {
-            return new Todo(line.substring(7));
+            Todo todo = new Todo(line.substring(7));
+            if (line.startsWith("[T][X] ")) {
+                todo.markAsDone();
+            }
+            return todo;
         }
         throw new IllegalArgumentException("Unrecognised task record.");
     }

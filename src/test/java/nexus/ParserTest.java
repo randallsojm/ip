@@ -72,6 +72,7 @@ class ParserTest {
     @Test
     void parseTask_eventThatDoesNotEndAfterStart_throwsException() {
         assertThrows(NexusException.class, () -> parser.parseTask("event meeting /from 10:00 /to 10:00"));
-        assertThrows(NexusException.class, () -> parser.parseTask("event meeting /from 2026-02-30T10:00 /to 2026-03-01T10:00"));
+        assertThrows(NexusException.class,
+                () -> parser.parseTask("event meeting /from 2026-02-30T10:00 /to 2026-03-01T10:00"));
     }
 }

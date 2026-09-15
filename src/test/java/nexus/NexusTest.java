@@ -10,7 +10,7 @@ import org.junit.jupiter.api.io.TempDir;
 /** Tests the shared command execution used by both Nexus user interfaces. */
 class NexusTest {
     @TempDir
-    Path temporaryDirectory;
+    private Path temporaryDirectory;
 
     @Test
     void executeCommand_addThenList_returnsUpdatedTaskOutput() {
@@ -35,5 +35,31 @@ class NexusTest {
         assertTrue(snoozeResponse.contains("Waypoint placed in orbit until 2099-01-01"));
         assertTrue(!listResponse.contains("prepare presentation"));
         assertTrue(findResponse.contains("prepare presentation"));
+    }
+
+    @Test
+    void executeCommand_invalidAndMutatingCommands_returnHelpfulResponses() {
+        Nexus nexus = new Nexus(temporaryDirectory.resolve("nexus.txt").toString());
+
+        assertTrue(nexus.executeCommand(null).startsWith("OOPS!!! Please enter"));
+        assertTrue(nexus.executeCommand("  list").contains("leading"));
+        assertTrue(nexus.executeCommand("unknown").contains("don't know"));
+        assertTrue(nexus.executeCommand("delete nope").contains("valid waypoint"));
+        assertTrue(nexus.executeCommand("todo keep").contains("Mission logged"));
+        assertTrue(nexus.executeCommand("mark 2").contains("no task"));
+        assertTrue(nexus.executeCommand("mark 1").contains("Waypoint secured"));
+        assertTrue(nexus.executeCommand("unmark 1").contains("back on the active route"));
+        assertTrue(nexus.executeCommand("delete 1").contains("Waypoint cleared"));
+    }
+
+    @Test
+    void executeCommand_snoozeValidation_rejectsMalformedDatesAndCommands() {
+        Nexus nexus = new Nexus(temporaryDirectory.resolve("nexus.txt").toString());
+
+        assertTrue(nexus.executeCommand("snooze 1").contains("Orbit protocol"));
+        assertTrue(nexus.executeCommand("snooze nope /until 2099-01-01").contains("valid waypoint"));
+        nexus.executeCommand("todo task");
+        assertTrue(nexus.executeCommand("snooze 1 /until 2020-01-01").contains("future"));
+        assertTrue(nexus.executeCommand("snooze 1 /until tomorrow").contains("yyyy-MM-dd"));
     }
 }
